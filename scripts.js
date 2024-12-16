@@ -4,24 +4,26 @@
 
 
 
-const convertButton = document.querySelector(".convert-button")
-const currencySelect = document.querySelector(".currency-select")
+const convertButton = document.querySelector(".convert-button");
+const currencySelect = document.querySelector(".currency-select");
 
-function convertValues() {
-    const inputCurrencyValue = document.querySelector(".input-currency").value
-    const currencyValueToConvert = document.querySelector(".currency-value-to-convert") //Valor em Real
-    const currencyValueConverted = document.querySelector(".currency-value") // Outras moedas
+const convertValues = async () => {
+    const inputCurrencyValue = document.querySelector(".input-currency").value;
+    const currencyValueToConvert = document.querySelector(".currency-value-to-convert"); //Valor em Real
+    const currencyValueConverted = document.querySelector(".currency-value"); // Outras moedas
 
-    const dolarToday = 5.20
-    const euroToday = 6.20
-    const shekelToday = 1.57
+    const data = await fetch("https://economia.awesomeapi.com.br/last/USD-BRL,EUR-BRL,ILS-BRL").then(response => response.json())
+
+    const dolar = data.USDBRL.high
+    const euro = data.EURBRL.high
+    const shekel = data.ILSBRL.high
 
     if (currencySelect.value == "dolar") {
 
         currencyValueConverted.innerHTML = new Intl.NumberFormat("en-US", {
             style: "currency",
             currency: "USD"
-        }).format(inputCurrencyValue / dolarToday)
+        }).format(inputCurrencyValue / dolar)
     }
 
     if (currencySelect.value == "euro") {
@@ -29,7 +31,7 @@ function convertValues() {
         currencyValueConverted.innerHTML = new Intl.NumberFormat("de-DE", {
             style: "currency",
             currency: "EUR"
-        }).format(inputCurrencyValue / euroToday)
+        }).format(inputCurrencyValue / euro)
 
     }
 
@@ -38,7 +40,7 @@ function convertValues() {
         currencyValueConverted.innerHTML = new Intl.NumberFormat("he-IL", {
             style: "currency",
             currency: "ILS"
-        }).format(inputCurrencyValue / shekelToday)
+        }).format(inputCurrencyValue / shekel)
     }
 
     currencyValueToConvert.innerHTML = new Intl.NumberFormat("pt-BR", {
@@ -67,7 +69,7 @@ function changeCurrency() {
         currencyImage.src = "./assets/shekel14.png"
     }
 
-    convertValues() 
+    convertValues()
 
 }
 
